@@ -4,16 +4,40 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { signIn } from "@/lib/auth/auth-client"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const SignIn = () => {
-    const [name, setName] = useState("");
+    
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+
+        try {
+            const result = await signIn.email({email, password });
+
+            if (result.error) {
+                setError(result.error.message ?? "Failed to sign up")
+            } else {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            setError("An unexpected error occurred.")
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
@@ -26,14 +50,14 @@ const SignIn = () => {
                         Enter your credentials to access your account
                     </CardDescription>
                 </CardHeader>
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <CardContent className="space-y-4">
                         {error && (
                             <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
                                 {error}
                             </div>
                         )}
-                        
+
                         <div className="space-y-2">
                             <Label htmlFor="email" className="text-gray-700">
                                 Email
@@ -70,7 +94,7 @@ const SignIn = () => {
                             className="w-full bg-primary hover:bg-primary/90"
                             disabled={loading}
                         >
-                            {loading ? "Creating account..." : "Sign In"}
+                            {loading ? "Signing in ..." : "Sign In"}
                         </Button>
                         <p className="text-center text-sm text-gray-600">
                             Don't have an account {" "}
