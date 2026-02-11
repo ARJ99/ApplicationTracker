@@ -1,12 +1,17 @@
+'use client'
+
 import { Briefcase } from "lucide-react"
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { getSession } from "@/lib/auth/auth"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "./ui/avatar"
+import { SignOutButton } from "./sign-out-btn"
+import { useSession } from "@/lib/auth/auth-client";
 
 
-export const Navbar = async () => {
+export const Navbar =  () => {
 
-    const session = await getSession();
+    const { data: session } = useSession();
 
     return (
         <nav className="border-b border-gray-200 bg-white">
@@ -21,6 +26,26 @@ export const Navbar = async () => {
                             <Link href="/dashboard">
                                 <Button variant="ghost" className="text-gray-700 hover:text-black">Dashboard</Button>
                             </Link>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <Button variant="ghost" className="bg-primary text-white">
+                                        <Avatar>
+                                            <AvatarFallback className="bg-primary">
+                                                {session.user.name[0].toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuLabel>
+                                        <div>
+                                            <p>{session.user.name}</p>
+                                            <p>{session.user.email}</p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <SignOutButton/>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </>
                     ) : (
                         <>
