@@ -27,7 +27,7 @@ export const Navbar =  () => {
                                 <Button variant="ghost" className="text-gray-700 hover:text-black">Dashboard</Button>
                             </Link>
                             <DropdownMenu>
-                                <DropdownMenuTrigger>
+                                <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                                         <Avatar className="h-8 w-8">
                                             <AvatarFallback className="bg-primary text-white">
