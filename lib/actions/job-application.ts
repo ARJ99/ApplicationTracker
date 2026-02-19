@@ -1,0 +1,17 @@
+'user server';
+interface JobApplicationData{
+    company: string,
+    position: string,
+    location?: string,
+    notes?:string,
+    salary?: string,
+    jobUrl?: string,
+    columnId:string,
+    boardId:string
+    tags?: string,
+    description: string,
+}
+
+export async function createJobApplication(data:JobApplicationData) {
+    
+}
