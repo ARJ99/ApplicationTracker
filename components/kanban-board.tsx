@@ -9,7 +9,7 @@ import CreateJobApplicationDialog from "./create-job-dialog";
 
 
 interface KanbanBoardProps {
-    board: Board;
+    board: Board | null;
     userId: string;
 }
 interface ColConfig {
@@ -73,6 +73,13 @@ function DroppableColumn({ column, config, boardId }: { column: Column, config: 
 }
 
 export const KanbanBoard = ({ board, userId }: KanbanBoardProps) => {
+    if (!board) {
+        return (
+            <div className="min-h-[400px] flex items-center justify-center text-gray-500">
+                No board found. Create a board to get started.
+            </div>
+        );
+    }
 
     const columns = board.columns;
     return (
