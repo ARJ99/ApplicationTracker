@@ -60,7 +60,7 @@ const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationD
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="outline">
                     <Plus />
                     Add Job
@@ -77,7 +77,7 @@ const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationD
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="company">Company *</Label>
-                                <Input id="companany"
+                                <Input id="company"
                                     required
                                     value={formData.company}
                                     onChange={(e) => setFormData({ ...formData, company: e.target.value })} />
@@ -145,7 +145,7 @@ const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationD
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                        <Button type="button">Add Application</Button>
+                        <Button type="submit">Add Application</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
