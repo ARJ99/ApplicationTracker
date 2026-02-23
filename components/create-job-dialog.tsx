@@ -7,7 +7,6 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useState } from "react";
-import { createJobApplication } from "@/lib/actions/job-application";
 
 
 
@@ -30,37 +29,21 @@ const INITIAL_FORM_DATA = {
 
 const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationDialogProps) => {
 
-    const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e:React.FormEvent) {
         e.preventDefault();
-
         try {
-            const result = await createJobApplication({
-                ...formData,
-                columnId,
-                boardId,
-                tags: formData.tags
-                    .split(",")
-                    .map((tag) => tag.trim())
-                    .filter((tag) => tag.length > 0),
-            });
-
-            if (!result.error) {
-                setFormData(INITIAL_FORM_DATA);
-                setOpen(false);
-            } else {
-                console.error("Failed to create job: ", result.error);
-            }
+            
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger>
                 <Button variant="outline">
                     <Plus />
                     Add Job
@@ -77,7 +60,7 @@ const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationD
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="company">Company *</Label>
-                                <Input id="company"
+                                <Input id="companany"
                                     required
                                     value={formData.company}
                                     onChange={(e) => setFormData({ ...formData, company: e.target.value })} />
@@ -145,7 +128,7 @@ const CreateJobApplicationDialog = ({ columnId, boardId }: CreateJobApplicationD
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-                        <Button type="submit">Add Application</Button>
+                        <Button type="button">Add Application</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

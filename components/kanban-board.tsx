@@ -1,6 +1,6 @@
 "use client"
 
-import { Board, Column, JobApplication } from "@/lib/models/models.types";
+import { Board, Column } from "@/lib/models/models.types";
 import { Award, Calendar, CheckCircle2, Mic, MoreHorizontal, MoreVertical, Trash2, XCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
@@ -8,9 +8,8 @@ import { Button } from "./ui/button";
 import CreateJobApplicationDialog from "./create-job-dialog";
 
 
-
 interface KanbanBoardProps {
-    board: Board | null;
+    board: Board;
     userId: string;
 }
 interface ColConfig {
@@ -41,13 +40,7 @@ const COLUMN_CONFIG: Array<ColConfig> = [
     },
 ];
 
-function DroppableColumn({ column, config, boardId, sortedColumns }: { column: Column; config: ColConfig; boardId: string; sortedColumns: Column[] }) {
-
-    const jobApps = column.jobApplications ?? [];
-    const sortedJobs = [...jobApps]
-        .filter((j): j is JobApplication => j != null && typeof j === "object" && "order" in j)
-        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-
+function DroppableColumn({ column, config, boardId }: { column: Column, config: ColConfig, boardId: string }) {
     return (
         <Card className=" min-w-[300px] shrink-0 shadow-md p-0">
             <CardHeader className={`${config.color} text-white rounded-t-lg pb-3`}>
@@ -73,44 +66,20 @@ function DroppableColumn({ column, config, boardId, sortedColumns }: { column: C
                 </div>
             </CardHeader>
             <CardContent className="space-y-2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg">
-                {sortedJobs.map((job, key) => (
-                    <SortableJobCard key={key} job={{ ...job, columnId: job.columnId || column._id }} columns={sortedColumns} />
-                ))}
-
-
                 <CreateJobApplicationDialog columnId={column._id} boardId={boardId}></CreateJobApplicationDialog>
             </CardContent>
         </Card>
     )
 }
 
-function SortableJobCard({ job, columns }: { job: JobApplication, columns: Column[] }) {
-    return (
-        <div>
-            <JobApplicationCard />
-        </div>
-    )
-}
-
 export const KanbanBoard = ({ board, userId }: KanbanBoardProps) => {
-    if (!board) {
-        return (
-            <div className="min-h-[400px] flex items-center justify-center text-gray-500">
-                No board found. Create a board to get started.
-            </div>
-        );
-    }
 
-    const columns = board.columns ?? [];
-    const sortedColumns = [...columns]
-        .filter((c): c is Column => c != null && typeof c === "object" && "order" in c)
-        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-
+    const columns = board.columns;
     return (
         <div>
             <div>
                 <div>
-                    {sortedColumns.map((col, key) => {
+                    {columns.map((col, key) => {
                         const config = COLUMN_CONFIG[key] || {
                             color: "bg-gray-500",
                             icon: <Calendar className="h-4 w-4" />
@@ -121,7 +90,6 @@ export const KanbanBoard = ({ board, userId }: KanbanBoardProps) => {
                                 column={col}
                                 config={config}
                                 boardId={board._id}
-                                sortedColumns={sortedColumns}
                             />)
                     })}
                 </div>
