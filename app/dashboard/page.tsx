@@ -18,6 +18,9 @@ const Dashboard = async () => {
         name:"Job Hunt",
     }).populate({
         path:"columns",
+        populate:{
+            path:"jobApplications",
+        }
     })
 
     return (
