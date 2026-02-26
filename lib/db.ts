@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
+import * as dotenv from "dotenv";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+// Load environment variables for local/scripts usage.
+// Next.js already loads .env.local for the app, but when running
+// standalone scripts (like seeding) we ensure it's loaded here too.
+if (process.env.NODE_ENV !== "production") {
+    dotenv.config({ path: ".env.local" });
+    dotenv.config();
+}
 
 interface MongooseCache {
     conn: typeof mongoose | null;
@@ -18,9 +25,11 @@ if (!global.mongoose) {
 }
 
 async function connectDB() {
+    const MONGODB_URI = process.env.MONGODB_URI;
+
     if (!MONGODB_URI) {
         throw new Error(
-            "Please define the MONGODB_URI environment variable inside .env"
+            "Please define the MONGODB_URI environment variable (e.g. in .env.local)"
         );
     }
 
