@@ -2,7 +2,9 @@ import connectDB from "../lib/db";
 import "@/lib/models";
 import { Board, Column, JobApplication } from "@/lib/models";
 
-const USER_ID = "6929e34361b6f083d154859d";
+// The user whose board/jobs will be seeded.
+// Set SEED_USER_ID in your .env.local to match an actual user.id.
+const USER_ID = process.env.SEED_USER_ID;
 
 const SAMPLE_JOBS = [
     // Wish List
